@@ -12,14 +12,19 @@ public class CourseServiceImpl implements CourseServiceInterface {
 
     //YOUR CODE STARTS HERE
 
+    private final CourseDao courseDao;
 
+    @Autowired
+    public CourseServiceImpl(CourseDao courseDao) {
+        this.courseDao = courseDao;
+    }
 
     //YOUR CODE ENDS HERE
 
     public List<Course> getAllCourses() {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return courseDao.getAllCourses();
 
         //YOUR CODE ENDS HERE
     }
@@ -27,7 +32,14 @@ public class CourseServiceImpl implements CourseServiceInterface {
     public Course getCourseById(int id) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            return courseDao.findCourseById(id);
+        } catch (DataAccessException e) {
+            Course notFound = new Course();
+            notFound.setCourseName("Course Not Found");
+            notFound.setCourseDesc("Course Not Found");
+            return notFound;
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -35,7 +47,13 @@ public class CourseServiceImpl implements CourseServiceInterface {
     public Course addNewCourse(Course course) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        if (course.getCourseName() == null || course.getCourseName().trim().isEmpty()) {
+            course.setCourseName("Name blank, course NOT added");
+        }
+        if (course.getCourseDesc() == null || course.getCourseDesc().trim().isEmpty()) {
+            course.setCourseDesc("Description blank, course NOT added");
+        }
+        return courseDao.createNewCourse(course);
 
         //YOUR CODE ENDS HERE
     }
@@ -43,7 +61,13 @@ public class CourseServiceImpl implements CourseServiceInterface {
     public Course updateCourseData(int id, Course course) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        if (id != course.getCourseId()) {
+            course.setCourseName("IDs do not match, course not updated");
+            course.setCourseDesc("IDs do not match, course not updated");
+            return course;
+        }
+        courseDao.updateCourse(course);
+        return course;
 
         //YOUR CODE ENDS HERE
     }
@@ -51,7 +75,8 @@ public class CourseServiceImpl implements CourseServiceInterface {
     public void deleteCourseById(int id) {
         //YOUR CODE STARTS HERE
 
-
+        courseDao.deleteCourse(id);
+        System.out.println("Course ID: " + id + " deleted");
 
         //YOUR CODE ENDS HERE
     }

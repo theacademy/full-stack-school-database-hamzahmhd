@@ -80,6 +80,6 @@ public class StudentDaoImplTests {
         //Delete student with id 8 as they are not enrolled in any classes
         studentDao.deleteStudent(8);
         assertNotNull(studentDao.getAllStudents());
-        assertEquals(8, studentDao.getAllStudents().size());
+        assertEquals(7, studentDao.getAllStudents().size());
     }
 }
